@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>CRUD</title>
+</head>
+<body>
+<h1>Táblázat</h1>
+
+<input type="hidden" id="hfRowIndex" value="" />
+<table class="table">
+    <tr>
+        <td>Id</td>
+        <td>
+            <input type="text" name="Id" id="txtId" value="1" />
+        </td>
+    </tr>
+    <tr>
+        <td>Name</td>
+        <td>
+            <input type="text" name="Name" id="txtName" value="" />
+        </td>
+    </tr>
+    <tr>
+        <td>Address</td>
+        <td>
+            <input type="text" name="Address" id="txtAdress" value="" />
+        </td>
+    </tr>
+    <tr>
+        <tr>
+            <td>E-mail</td>
+            <td>
+                <input type="text" name="E-mail" id="txtEmail" value="" />
+            </td>
+        </tr>   
+        <td>
+            <button type='button' id='btnAdd'>Add</button>
+            <button type='button' id='btnUpdate' style="display: none;">Update</button>
+        </td>
+        <td>
+            <button type='button' id='btnClear'>Clear</button>
+        </td>
+    </tr>
+</table>
+<table id="tblCustomers" class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Country</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#btnAdd').on('click', function () {
+            var name, country, id;
+            id = $("#txtId").val();
+            name = $("#txtName").val();
+            address = $("#txtAddress").val();
+            email =  $("#txtEmail").val();
+            var edit = "<a class='edit' href='JavaScript:void(0);' >Edit</a>";
+            var del = "<a class='delete' href='JavaScript:void(0);'>Delete</a>";
+
+            if (name == "" || address == "") {
+                alert("Kérlek add meg a kért adatokat");
+            } else {
+                var table = "<tr><td>" + id + "</td><td>" + name + "</td><td>" + address + "</td><td>" + edit + "</td><td>" + del + "</td></tr>";
+                $("#tblCustomers").append(table);
+            }
+            id = $("#txtId").val("");
+            name = $("#txtName").val("");
+            address = $("#txtAddress").val("");
+            email = $("#txtEmail").val();
+            Clear();
+        });
+
+        $('#btnUpdate').on('click', function () {
+            var name, address, id;
+            id = $("#txtId").val();
+            name = $("#txtName").val();
+            address = $("#txtAddress").val();
+            email =  $("#txtEmail").val();
+
+            $('#tblCustomers tbody tr').eq($('#hfRowIndex').val()).find('td').eq(1).html(name);
+            $('#tblCustomers tbody tr').eq($('#hfRowIndex').val()).find('td').eq(2).html(address)
+
+            $('#btnAdd').show();
+            $('#btnUpdate').hide();
+            Clear();
+        });
+
+        $("#tblCustomers").on("click", ".delete", function (e) {
+            if (confirm("Are you sure want to delete this record!")) {
+                $(this).closest('tr').remove();
+            } else {
+                e.preventDefault();
+            }
+        });
+
+        $('#btnClear').on('click', function () {
+            Clear();
+        });
+
+        $("#tblCustomers").on("click", ".edit", function (e) {
+            var row = $(this).closest('tr');
+            $('#hfRowIndex').val($(row).index());
+            var td = $(row).find("td");
+            $('#txtId').val($(td).eq(0).html());
+            $('#txtName').val($(td).eq(1).html());
+            $('#txtAddress').val($(td).eq(2).html());
+            $("#txtEmail").val($(td).eq(2).html());
+            $('#btnAdd').hide();
+            $('#btnUpdate').show();
+        });
+    });
+    function Clear() {
+        $("#txtId").val("");
+        $("#txtName").val("");
+        $("#txtAddress").val("");
+        $("#txtEmail").val("");
+        
+        $("#hfRowIndex").val("");
+    }
+</script>
+</body>
+</html>
